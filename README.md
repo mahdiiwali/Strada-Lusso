@@ -13,8 +13,11 @@ The app opens with a **home screen** displaying a grid of luxury car cards, each
 
 From the home screen, users can access the **favorites page** via the bottom navigation bar to view their saved cars, or use the **search functionality** to find specific models. The heart icon on each car card allows users to quickly add or remove vehicles from their favorites list, with changes instantly reflected across all screens. Category filters enable users to browse cars by type (e.g., sports cars, SUVs, sedans).
 
-![Home Screen](screenshots/home_screen.png)  
-![Car Details](screenshots/car_details.png)
+![Onboarding](screenshots/Onboarding.png)  
+![Home Screen](screenshots/HomeScreen.png)  
+![Car Details](screenshots/Details.png)
+![Details_of_booking](screenshots/Details_of_booking.png)
+
 
 ## Technology and Implementation
 
