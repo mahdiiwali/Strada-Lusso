@@ -4,10 +4,12 @@ import 'package:flutter_application_1/data/models/car.dart';
 import 'package:flutter_application_1/presentation/widgets/car_card.dart';
 import 'package:flutter_application_1/presentation/pages/car_search_page.dart';
 import 'package:flutter_application_1/presentation/pages/favorite_cars_page.dart';
+import 'package:flutter_application_1/utils/responsive_utils.dart';
 import 'package:flutter_application_1/presentation/bloc/car_bloc.dart';
 import 'package:flutter_application_1/presentation/bloc/car_event.dart';
 import 'package:flutter_application_1/presentation/bloc/car_state.dart';
 import 'package:flutter_application_1/injection_container.dart';
+import 'package:flutter_application_1/data/datasource/favorites_storage_service.dart';
 
 class CarListScreen extends StatefulWidget {
   @override
@@ -26,6 +28,23 @@ class _CarListScreenState extends State<CarListScreen> {
     "Luxury SUV",
   ];
   final Set<String> _favoriteCars = {}; // Track favorite car models
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFavorites();
+  }
+
+  Future<void> _loadFavorites() async {
+    final favorites = await FavoritesStorageService.loadFavorites();
+    setState(() {
+      _favoriteCars.addAll(favorites);
+    });
+  }
+
+  Future<void> _saveFavorites() async {
+    await FavoritesStorageService.saveFavorites(_favoriteCars);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -212,41 +231,57 @@ class _CarListScreenState extends State<CarListScreen> {
                   ),
                 ),
 
-                // Car List
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      // Filter cars based on selected category
-                      final filteredCars = _selectedCategory == 'All'
-                          ? cars
+                // Car Grid - Responsive
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ResponsiveUtils.getResponsivePadding(context),
+                  ),
+                  sliver: SliverGrid(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: ResponsiveUtils.getGridCount(context),
+                      childAspectRatio: ResponsiveUtils.getCardAspectRatio(
+                        context,
+                      ),
+                      crossAxisSpacing: ResponsiveUtils.getGridSpacing(context),
+                      mainAxisSpacing: ResponsiveUtils.getGridSpacing(context),
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        // Filter cars based on selected category
+                        final filteredCars = _selectedCategory == 'All'
+                            ? cars
+                            : cars
+                                  .where(
+                                    (car) => car.category == _selectedCategory,
+                                  )
+                                  .toList();
+
+                        if (index >= filteredCars.length) return null;
+
+                        final car = filteredCars[index];
+                        return CarCard(
+                          car: car,
+                          isFavorited: _favoriteCars.contains(car.model),
+                          onFavoriteToggle: () {
+                            setState(() {
+                              if (_favoriteCars.contains(car.model)) {
+                                _favoriteCars.remove(car.model);
+                              } else {
+                                _favoriteCars.add(car.model);
+                              }
+                            });
+                            _saveFavorites(); // Save to local storage
+                          },
+                        );
+                      },
+                      childCount: (_selectedCategory == 'All'
+                          ? cars.length
                           : cars
                                 .where(
                                   (car) => car.category == _selectedCategory,
                                 )
-                                .toList();
-
-                      if (index >= filteredCars.length) return null;
-
-                      final car = filteredCars[index];
-                      return CarCard(
-                        car: car,
-                        isFavorited: _favoriteCars.contains(car.model),
-                        onFavoriteToggle: () {
-                          setState(() {
-                            if (_favoriteCars.contains(car.model)) {
-                              _favoriteCars.remove(car.model);
-                            } else {
-                              _favoriteCars.add(car.model);
-                            }
-                          });
-                        },
-                      );
-                    },
-                    childCount: (_selectedCategory == 'All'
-                        ? cars.length
-                        : cars
-                              .where((car) => car.category == _selectedCategory)
-                              .length),
+                                .length),
+                    ),
                   ),
                 ),
 

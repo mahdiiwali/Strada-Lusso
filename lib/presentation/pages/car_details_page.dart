@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/models/car.dart';
 import 'package:flutter_application_1/presentation/widgets/car_card.dart';
 import 'package:flutter_application_1/presentation/widgets/more_car_cards.dart';
+import 'package:flutter_application_1/utils/responsive_utils.dart';
 
 class CarDetailsPage extends StatelessWidget {
   final Car car;
@@ -35,316 +36,324 @@ class CarDetailsPage extends StatelessWidget {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 10),
-            // Car Card
-            CarCard(
-              car: car,
-              isFavorited: false, // Not applicable in details view
-              onFavoriteToggle: () {}, // No-op in details view
-            ),
-
-            SizedBox(height: 24),
-
-            // Owner/Seller Info Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Color(0xff2A2A2E), Color(0xff1F1F23)],
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.4),
-                      spreadRadius: 0,
-                      blurRadius: 20,
-                      offset: Offset(0, 8),
-                    ),
-                    BoxShadow(
-                      color: Color(0xffD1122C).withOpacity(0.15),
-                      spreadRadius: 0,
-                      blurRadius: 12,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
+      body: ResponsiveUtils.constrainContentWidth(
+        context: context,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 10),
+              // Car Card - Bigger on Web
+              SizedBox(
+                height: MediaQuery.of(context).size.width > 1024
+                    ? 400 // Bigger height for web/desktop
+                    : null, // Default height for mobile
+                child: CarCard(
+                  car: car,
+                  isFavorited: false, // Not applicable in details view
+                  onFavoriteToggle: () {}, // No-op in details view
                 ),
-                child: Row(
-                  children: [
-                    // Avatar with Gradient Border
-                    Container(
-                      padding: EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                          colors: [Color(0xffD1122C), Color(0xffA00F23)],
-                        ),
+              ),
+
+              SizedBox(height: 24),
+
+              // Owner/Seller Info Section
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Color(0xff2A2A2E), Color(0xff1F1F23)],
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.4),
+                        spreadRadius: 0,
+                        blurRadius: 20,
+                        offset: Offset(0, 8),
                       ),
-                      child: Container(
+                      BoxShadow(
+                        color: Color(0xffD1122C).withOpacity(0.15),
+                        spreadRadius: 0,
+                        blurRadius: 12,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      // Avatar with Gradient Border
+                      Container(
                         padding: EdgeInsets.all(3),
                         decoration: BoxDecoration(
-                          color: Color(0xff1F1F23),
                           shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            colors: [Color(0xffD1122C), Color(0xffA00F23)],
+                          ),
                         ),
-                        child: CircleAvatar(
-                          radius: 36,
-                          backgroundImage: AssetImage("assets/user.png"),
+                        child: Container(
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            color: Color(0xff1F1F23),
+                            shape: BoxShape.circle,
+                          ),
+                          child: CircleAvatar(
+                            radius: 36,
+                            backgroundImage: AssetImage("assets/user.png"),
+                          ),
                         ),
                       ),
-                    ),
 
-                    SizedBox(width: 16),
+                      SizedBox(width: 16),
 
-                    // Owner Info
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Owner',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xffA3ACB3),
-                              letterSpacing: 0.5,
+                      // Owner Info
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Owner',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xffA3ACB3),
+                                letterSpacing: 0.5,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            car.ownerName,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white,
-                              letterSpacing: 0.3,
+                            SizedBox(height: 4),
+                            Text(
+                              car.ownerName,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                                letterSpacing: 0.3,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.star,
-                                color: Color(0xffFFB800),
-                                size: 16,
-                              ),
-                              SizedBox(width: 4),
-                              Text(
-                                car.ownerRating.toString(),
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.star,
+                                  color: Color(0xffFFB800),
+                                  size: 16,
                                 ),
-                              ),
-                              SizedBox(width: 4),
-                              Text(
-                                '(${car.ownerReviews} reviews)',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xffA3ACB3),
+                                SizedBox(width: 4),
+                                Text(
+                                  car.ownerRating.toString(),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Contact Button
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Color(0xffD1122C), Color(0xffA00F23)],
+                                SizedBox(width: 4),
+                                Text(
+                                  '(${car.ownerReviews} reviews)',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xffA3ACB3),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0xffD1122C).withOpacity(0.4),
-                            blurRadius: 8,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
                       ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () {
-                            _showOwnerPhoneDialog(context);
-                          },
+
+                      // Contact Button
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Color(0xffD1122C), Color(0xffA00F23)],
+                          ),
                           borderRadius: BorderRadius.circular(12),
-                          child: Padding(
-                            padding: EdgeInsets.all(12),
-                            child: Icon(
-                              Icons.phone,
-                              color: Colors.white,
-                              size: 24,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xffD1122C).withOpacity(0.4),
+                              blurRadius: 8,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              _showOwnerPhoneDialog(context);
+                            },
+                            borderRadius: BorderRadius.circular(12),
+                            child: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Icon(
+                                Icons.phone,
+                                color: Colors.white,
+                                size: 24,
+                              ),
                             ),
                           ),
                         ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 24),
+
+              // Car Specifications Section
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Specifications',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                        letterSpacing: 0.3,
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildSpecCard(
+                            icon: Icons.speed,
+                            label: 'Max Speed',
+                            value: car.maxSpeed,
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: _buildSpecCard(
+                            icon: Icons.av_timer,
+                            label: '0-100 km/h',
+                            value: car.acceleration,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildSpecCard(
+                            icon: Icons.settings,
+                            label: 'Transmission',
+                            value: car.transmission,
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: _buildSpecCard(
+                            icon: Icons.event_seat,
+                            label: 'Seats',
+                            value: '${car.seats} People',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 24),
+
+              // More Cars Section
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Similar Cars',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                        letterSpacing: 0.3,
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                  ],
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    MoreCarCards(
+                      car: Car(
+                        model: car.model + "-1",
+                        distance: car.distance + 100,
+                        fuelCapacity: car.fuelCapacity + 100,
+                        price: car.price + 10,
+                        maxSpeed: car.maxSpeed,
+                        acceleration: car.acceleration,
+                        transmission: car.transmission,
+                        seats: car.seats,
+                        category: car.category,
+                        imageUrl: car.imageUrl,
+                        ownerName: car.ownerName,
+                        ownerPhone: car.ownerPhone,
+                        ownerRating: car.ownerRating,
+                        ownerReviews: car.ownerReviews,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    MoreCarCards(
+                      car: Car(
+                        model: car.model + "-2",
+                        distance: car.distance + 200,
+                        fuelCapacity: car.fuelCapacity + 50,
+                        price: car.price + 15,
+                        maxSpeed: car.maxSpeed,
+                        acceleration: car.acceleration,
+                        transmission: car.transmission,
+                        seats: car.seats,
+                        category: car.category,
+                        imageUrl: car.imageUrl,
+                        ownerName: car.ownerName,
+                        ownerPhone: car.ownerPhone,
+                        ownerRating: car.ownerRating,
+                        ownerReviews: car.ownerReviews,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    MoreCarCards(
+                      car: Car(
+                        model: car.model + "-3",
+                        distance: car.distance + 150,
+                        fuelCapacity: car.fuelCapacity + 75,
+                        price: car.price + 20,
+                        maxSpeed: car.maxSpeed,
+                        acceleration: car.acceleration,
+                        transmission: car.transmission,
+                        seats: car.seats,
+                        category: car.category,
+                        imageUrl: car.imageUrl,
+                        ownerName: car.ownerName,
+                        ownerPhone: car.ownerPhone,
+                        ownerRating: car.ownerRating,
+                        ownerReviews: car.ownerReviews,
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
 
-            SizedBox(height: 24),
-
-            // Car Specifications Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Specifications',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                      letterSpacing: 0.3,
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildSpecCard(
-                          icon: Icons.speed,
-                          label: 'Max Speed',
-                          value: car.maxSpeed,
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: _buildSpecCard(
-                          icon: Icons.av_timer,
-                          label: '0-100 km/h',
-                          value: car.acceleration,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildSpecCard(
-                          icon: Icons.settings,
-                          label: 'Transmission',
-                          value: car.transmission,
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: _buildSpecCard(
-                          icon: Icons.event_seat,
-                          label: 'Seats',
-                          value: '${car.seats} People',
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            SizedBox(height: 24),
-
-            // More Cars Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Similar Cars',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                      letterSpacing: 0.3,
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                ],
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  MoreCarCards(
-                    car: Car(
-                      model: car.model + "-1",
-                      distance: car.distance + 100,
-                      fuelCapacity: car.fuelCapacity + 100,
-                      price: car.price + 10,
-                      maxSpeed: car.maxSpeed,
-                      acceleration: car.acceleration,
-                      transmission: car.transmission,
-                      seats: car.seats,
-                      category: car.category,
-                      imageUrl: car.imageUrl,
-                      ownerName: car.ownerName,
-                      ownerPhone: car.ownerPhone,
-                      ownerRating: car.ownerRating,
-                      ownerReviews: car.ownerReviews,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  MoreCarCards(
-                    car: Car(
-                      model: car.model + "-2",
-                      distance: car.distance + 200,
-                      fuelCapacity: car.fuelCapacity + 50,
-                      price: car.price + 15,
-                      maxSpeed: car.maxSpeed,
-                      acceleration: car.acceleration,
-                      transmission: car.transmission,
-                      seats: car.seats,
-                      category: car.category,
-                      imageUrl: car.imageUrl,
-                      ownerName: car.ownerName,
-                      ownerPhone: car.ownerPhone,
-                      ownerRating: car.ownerRating,
-                      ownerReviews: car.ownerReviews,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  MoreCarCards(
-                    car: Car(
-                      model: car.model + "-3",
-                      distance: car.distance + 150,
-                      fuelCapacity: car.fuelCapacity + 75,
-                      price: car.price + 20,
-                      maxSpeed: car.maxSpeed,
-                      acceleration: car.acceleration,
-                      transmission: car.transmission,
-                      seats: car.seats,
-                      category: car.category,
-                      imageUrl: car.imageUrl,
-                      ownerName: car.ownerName,
-                      ownerPhone: car.ownerPhone,
-                      ownerRating: car.ownerRating,
-                      ownerReviews: car.ownerReviews,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            SizedBox(height: 100), // Extra space for bottom button
-          ],
+              SizedBox(height: 100), // Extra space for bottom button
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Container(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/models/car.dart';
 import 'package:flutter_application_1/presentation/widgets/car_card.dart';
+import 'package:flutter_application_1/utils/responsive_utils.dart';
 
 class CarSearchPage extends StatefulWidget {
   final List<Car> allCars;
@@ -185,8 +186,19 @@ class _CarSearchPageState extends State<CarSearchPage> {
                       ],
                     ),
                   )
-                : ListView.builder(
-                    padding: EdgeInsets.only(top: 10, bottom: 20),
+                : GridView.builder(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: ResponsiveUtils.getResponsivePadding(context),
+                      vertical: 20,
+                    ),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: ResponsiveUtils.getGridCount(context),
+                      childAspectRatio: ResponsiveUtils.getCardAspectRatio(
+                        context,
+                      ),
+                      crossAxisSpacing: ResponsiveUtils.getGridSpacing(context),
+                      mainAxisSpacing: ResponsiveUtils.getGridSpacing(context),
+                    ),
                     itemCount: _filteredCars.length,
                     itemBuilder: (context, index) {
                       final car = _filteredCars[index];

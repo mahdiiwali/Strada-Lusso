@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/models/car.dart';
 import 'package:flutter_application_1/presentation/widgets/car_card.dart';
+import 'package:flutter_application_1/utils/responsive_utils.dart';
 
 class FavoriteCarsPage extends StatefulWidget {
   final List<Car> favoriteCars;
@@ -98,8 +99,17 @@ class _FavoriteCarsPageState extends State<FavoriteCarsPage> {
                 ],
               ),
             )
-          : ListView.builder(
-              padding: EdgeInsets.only(top: 20, bottom: 20),
+          : GridView.builder(
+              padding: EdgeInsets.symmetric(
+                horizontal: ResponsiveUtils.getResponsivePadding(context),
+                vertical: 20,
+              ),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: ResponsiveUtils.getGridCount(context),
+                childAspectRatio: ResponsiveUtils.getCardAspectRatio(context),
+                crossAxisSpacing: ResponsiveUtils.getGridSpacing(context),
+                mainAxisSpacing: ResponsiveUtils.getGridSpacing(context),
+              ),
               itemCount: widget.favoriteCars.length,
               itemBuilder: (context, index) {
                 final car = widget.favoriteCars[index];

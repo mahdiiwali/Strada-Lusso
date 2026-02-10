@@ -44,7 +44,9 @@ class Car {
       transmission: map['transmission'],
       seats: map['seats'],
       category: map['category'],
-      imageUrl: map['imageUrl'] ?? '',
+      imageUrl:
+          map['imageUrl'] ??
+          '', // Removed cache-busting for better mobile performance
       ownerName: map['ownerName'],
       ownerPhone: map['ownerPhone'],
       ownerRating: map['ownerRating'],

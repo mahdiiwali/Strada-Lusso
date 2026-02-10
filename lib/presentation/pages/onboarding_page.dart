@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/presentation/pages/car_list_screen.dart';
+import 'package:flutter_application_1/utils/responsive_utils.dart';
 
 /// Onboarding screen showcasing Porsche with premium dark theme
 /// Implements responsive layout using OrientationBuilder
@@ -96,71 +97,75 @@ class OnboardingPage extends StatelessWidget {
   Widget _buildTextContent() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32.0),
-      child: Column(
-        children: [
-          // Main heading
-          const Text(
-            "Premium Cars",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 42,
-              fontWeight: FontWeight.w900,
-              color: Colors.white,
-              letterSpacing: -0.5,
-              height: 1.2,
-              shadows: [
-                Shadow(
-                  color: Colors.black,
-                  blurRadius: 10,
-                  offset: Offset(0, 2),
-                ),
-              ],
+      child: Builder(
+        builder: (context) => Column(
+          children: [
+            // Main heading
+            Text(
+              "Premium Cars",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize:
+                    ResponsiveUtils.getHeadingSize(context) +
+                    6, // Extra large for hero
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+                letterSpacing: ResponsiveUtils.getHeadingLetterSpacing(context),
+                height: 1.2,
+                shadows: [
+                  Shadow(
+                    color: Colors.black.withOpacity(0.5),
+                    blurRadius: 12,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          const SizedBox(height: 12),
+            SizedBox(height: ResponsiveUtils.getCompactSpacing(context)),
 
-          const Text(
-            "Enjoy the Luxury",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w300,
-              color: Colors.white,
-              letterSpacing: 0.5,
-              height: 1.2,
-              shadows: [
-                Shadow(
-                  color: Colors.black,
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
-                ),
-              ],
+            Text(
+              "Enjoy the Luxury",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: ResponsiveUtils.getSubheadingSize(context),
+                fontWeight: FontWeight.w300,
+                color: Colors.white,
+                letterSpacing: 0.8,
+                height: 1.3,
+                shadows: [
+                  Shadow(
+                    color: Colors.black.withOpacity(0.4),
+                    blurRadius: 8,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          const SizedBox(height: 20),
+            SizedBox(height: ResponsiveUtils.getItemSpacing(context)),
 
-          // Subtitle
-          Text(
-            "Premium and prestige car daily rental.\nExperience the thrill of driving luxury.",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              color: Colors.grey[200],
-              height: 1.6,
-              letterSpacing: 0.2,
-              shadows: const [
-                Shadow(
-                  color: Colors.black,
-                  blurRadius: 6,
-                  offset: Offset(0, 1),
-                ),
-              ],
+            // Subtitle
+            Text(
+              "Premium and prestige car daily rental.\nExperience the thrill of driving luxury.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: ResponsiveUtils.getBodyFontSize(context),
+                fontWeight: FontWeight.w400,
+                color: ResponsiveUtils.textSecondary.withOpacity(0.9),
+                height: 1.6,
+                letterSpacing: ResponsiveUtils.getBodyLetterSpacing(),
+                shadows: [
+                  Shadow(
+                    color: Colors.black.withOpacity(0.4),
+                    blurRadius: 6,
+                    offset: Offset(0, 1),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -171,7 +176,7 @@ class OnboardingPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 32.0),
       child: SizedBox(
         width: double.infinity,
-        height: 56,
+        height: ResponsiveUtils.getButtonHeight(context),
         child: FilledButton(
           onPressed: () {
             Navigator.push(
@@ -185,13 +190,15 @@ class OnboardingPage extends StatelessWidget {
             elevation: 8,
             shadowColor: Colors.black.withOpacity(0.5),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(
+                ResponsiveUtils.getBorderRadius(context),
+              ),
             ),
           ),
-          child: const Text(
+          child: Text(
             "Let's Go",
             style: TextStyle(
-              fontSize: 18,
+              fontSize: ResponsiveUtils.getButtonFontSize(context),
               fontWeight: FontWeight.bold,
               letterSpacing: 0.5,
             ),
